@@ -21,7 +21,7 @@ As a data specialist working for Salifort Motors, you have received the results 
 
 ### Data source: 
 
-Hr Analytics Job Prediction Data on [Kaggle](https://www.kaggle.com/datasets/mfaisalqureshi/hr-analytics-and-job-prediction?select=HR_comma_sep.csv). The data contains survey responses from 14,999 employees at Saliford Motors. This dataset contains input related to satisfaction level, performance review, number of projects, average monthly hours, time spent at the company, number of work accidents, promotions over the last 5 years, work department and salary. 
+Hr Analytics Job Prediction Data on [Kaggle](https://www.kaggle.com/datasets/mfaisalqureshi/hr-analytics-and-job-prediction?select=HR_comma_sep.csv). The data contains survey responses from 14,999 employees at Saliford Motors. This dataset contains input related to satisfaction level, performance review, number of projects, average monthly hours, time spent at the company, number of work accidents, promotions over the last 5 years, work department and salary. The data dictionary can be found [here](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/Data%20dictionary%20.png).
 
 ### Limitations: 
 * Since the data was collected through a survey, the results may not be accurate as such participants may not provide honest and accurate answers.
