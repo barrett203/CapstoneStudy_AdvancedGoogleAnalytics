@@ -88,7 +88,7 @@ df0 = df0.rename(columns={'Work_accident': 'work_accident',
 df0.isna().sum()
 df0.duplicated().sum()
 ```
-There are no missing values in the dataset but there are 3,008 rows contain duplicates. That is apprximately 20% of the data.
+* There are no missing values in the dataset but there are 3,008 rows contain duplicates. That is apprximately 20% of the data.
 
 5)Drop duplicates and save resulting dataframe in a new variable as needed
 ```
@@ -104,6 +104,38 @@ sns.boxplot(x=df1['tenure'])
 plt.show()
 ```
 ![Boxplot](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/Boxplot_OutliersForTenure.png "Boxplot")
+
+7)Determine the number of rows containing outliers 
+```
+# Compute the 25th percentile value in `tenure`
+percentile25 = df1['tenure'].quantile(0.25)
+
+# Compute the 75th percentile value in `tenure`
+percentile75 = df1['tenure'].quantile(0.75)
+
+# Compute the interquartile range in `tenure`
+iqr = percentile75 - percentile25
+
+# Define the upper limit and lower limit for non-outlier values in `tenure`
+upper_limit = percentile75 + 1.5 * iqr
+lower_limit = percentile25 - 1.5 * iqr
+print("Lower limit:", lower_limit)
+print("Upper limit:", upper_limit)
+
+# Identify subset of data containing outliers in `tenure`
+outliers = df1[(df1['tenure'] > upper_limit) | (df1['tenure'] < lower_limit)]
+
+# Count how many rows in the data contain outliers in `tenure`
+print("Number of rows in the data containing outliers in `tenure`:", len(outliers))
+```
+* 824 rows in the time spent at company column contain outliers. As certain types of models are more sensitive to outliers than others, these will be considered at the model building stage of analysis.
+
+# Analyze 
+
+## Select summary statistics and visualizations 
+
+
+
 
 
 
