@@ -32,7 +32,78 @@ Hr Analytics Job Prediction Data on [Kaggle](https://www.kaggle.com/datasets/mfa
 Excel will be used to load the data and initially look for any issues. Python will then be used to transform and explore the data. 
 
 ## Transform and Explore 
-All Python code can be found [here](
+All Python code can be found [here](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/PythonScript).
+
+1) Load the necessary packages
+2) Check to see if the data has been loaded correctly
+
+```
+# For data manipulation
+!pip install numpy
+import numpy as np
+!pip install pandas
+import pandas as pd
+
+
+# For data visualization
+!pip install matplotlib
+import matplotlib.pyplot as plt
+!pip install seaborn
+import seaborn as sns
+
+# For displaying all of the columns in dataframes
+pd.set_option('display.max_columns', None)
+
+# For data modeling
+!pip install xgboost
+from xgboost import XGBClassifier
+from xgboost import XGBRegressor
+from xgboost import plot_importance
+
+!pip install scikit-learn
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+# For metrics and helpful functions
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score,\
+f1_score, confusion_matrix, ConfusionMatrixDisplay, classification_report
+from sklearn.metrics import roc_auc_score, roc_curve
+from sklearn.tree import plot_tree
+
+#Load dataset into a dataframe
+df0 = pd.read_csv("C:\\Users\\ocbar\\Documents\\Advanced google data analytics\\Capstone study\\archive\\HR_capstone.csv")
+```
+
+3)Rename the columns as needed 
+```
+df0 = df0.rename(columns={'Work_accident': 'work_accident',
+                          'average_montly_hours': 'average_monthly_hours',
+                          'time_spend_company': 'tenure',
+                          'Department': 'department'})
+```
+4)Check for missing values and duplicates. 
+```
+df0.isna().sum()
+df0.duplicated().sum()
+```
+There are no missing values in the dataset but there are 3,008 rows contain duplicates. That is apprximately 20% of the data.
+
+5)Drop duplicates and save resulting dataframe in a new variable as needed
+```
+df1 = df0.drop_duplicates(keep='first')
+```
+6)Check for outliers by visualising distribution of time spent at the company 
+```
+plt.figure(figsize=(6,6))
+plt.title('Boxplot to detect outliers for tenure', fontsize=12)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+sns.boxplot(x=df1['tenure'])
+plt.show()
+```
+![Boxplot](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/Boxplot_OutliersForTenure.png "Boxplot")
 
 
 
