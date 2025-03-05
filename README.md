@@ -133,6 +133,244 @@ print("Number of rows in the data containing outliers in `tenure`:", len(outlier
 # Analyze 
 
 ## Select summary statistics and visualizations 
+1)Showcase descriptive statistics 
+```
+df0.describe()
+```
+![Summary](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/Descriptive%20statistics%20.png "Summary")
+* The average employee rated their satisfaction as 6.13/10, was scored at 7.16/10 on their last evaluation and has completed 3.80 projects. On average, they have also spent 3.50 years working at the company, have experienced 1.45 work accidents and have had 0.21 promotions over the last 5 years. 2.38/10 employees have also left the company.
+
+2)Create a stacked boxplot showing average monthly hours distributions for number of project, comparing the distributions of employees who stayed versus those who left. Also plot a stacked histogram to visualize the distribution of number_project for those who stayed and those who left.
+```
+# Set figure and axes
+fig, ax = plt.subplots(1, 2, figsize = (22,8))
+
+# Create boxplot showing `average_monthly_hours` distributions for `number_project`, comparing employees who stayed versus those who left
+sns.boxplot(data=df1, x='average_monthly_hours', y='number_project', hue='left', orient="h", ax=ax[0])
+ax[0].invert_yaxis()
+ax[0].set_title('Monthly hours by number of projects', fontsize='14')
+
+# Create histogram showing distribution of `number_project`, comparing employees who stayed versus those who left
+tenure_stay = df1[df1['left']==0]['number_project']
+tenure_left = df1[df1['left']==1]['number_project']
+sns.histplot(data=df1, x='number_project', hue='left', multiple='dodge', shrink=2, ax=ax[1])
+ax[1].set_title('Number of projects histogram', fontsize='14')
+
+# Display the plots
+plt.show()
+```
+![Projects](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/MonthlyHours_ByNumberOfProjects.png "Projects")
+
+3)Examine the average monthly hours versus the satisfaction levels.
+```
+# Create scatterplot of `average_monthly_hours` versus `satisfaction_level`, comparing employees who stayed versus those who left
+plt.figure(figsize=(16, 9))
+sns.scatterplot(data=df1, x='average_monthly_hours', y='satisfaction_level', hue='left', alpha=0.4)
+plt.axvline(x=166.67, color='#ff6361', label='166.67 hrs./mo.', ls='--')
+plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
+plt.title('Monthly hours by last evaluation score', fontsize='14');
+```
+![Scatterplot](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/MonthlyHours_ByEvaluationScore.png "Scatterplot")
+
+4)Visualize satisfaction levels by time spent at the company.
+```
+# Set figure and axes
+fig, ax = plt.subplots(1, 2, figsize = (22,8))
+
+# Create boxplot showing distributions of `satisfaction_level` by tenure, comparing employees who stayed versus those who left
+sns.boxplot(data=df1, x='satisfaction_level', y='tenure', hue='left', orient="h", ax=ax[0])
+ax[0].invert_yaxis()
+ax[0].set_title('Satisfaction by tenure', fontsize='14')
+
+# Create histogram showing distribution of `tenure`, comparing employees who stayed versus those who left
+tenure_stay = df1[df1['left']==0]['tenure']
+tenure_left = df1[df1['left']==1]['tenure']
+sns.histplot(data=df1, x='tenure', hue='left', multiple='dodge', shrink=5, ax=ax[1])
+ax[1].set_title('Tenure histogram', fontsize='14')
+
+plt.show();
+```
+![Tenure](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/Satisfaction_ByTenure.png "Tenure")
+
+5)Examine salary levels for different times spent at the company. 
+```
+# Set figure and axes
+fig, ax = plt.subplots(1, 2, figsize = (22,8))
+
+# Define short-tenured employees
+tenure_short = df1[df1['tenure'] < 7]
+
+# Define long-tenured employees
+tenure_long = df1[df1['tenure'] > 6]
+
+# Plot short-tenured histogram
+sns.histplot(data=tenure_short, x='tenure', hue='salary', discrete=1, 
+             hue_order=['low', 'medium', 'high'], multiple='dodge', shrink=.5, ax=ax[0])
+ax[0].set_title('Salary histogram by tenure: short-tenured people', fontsize='14')
+
+# Plot long-tenured histogram
+sns.histplot(data=tenure_long, x='tenure', hue='salary', discrete=1, 
+             hue_order=['low', 'medium', 'high'], multiple='dodge', shrink=.4, ax=ax[1])
+ax[1].set_title('Salary histogram by tenure: long-tenured people', fontsize='14');
+```
+![Salary](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/SalaryHistogram_ByTenure.png "Salary")
+
+6)Explore whether there's a correlation between working long hours and receiving high evaluation scores.
+```
+# Create scatterplot of `average_monthly_hours` versus `last_evaluation`
+plt.figure(figsize=(16, 9))
+sns.scatterplot(data=df1, x='average_monthly_hours', y='last_evaluation', hue='left', alpha=0.4)
+plt.axvline(x=166.67, color='#ff6361', label='166.67 hrs./mo.', ls='--')
+plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
+plt.title('Monthly hours by last evaluation score', fontsize='14');
+```
+![Evaluation](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/MonthlyHoursBy_LastEvaluationScore.png "Evaluation")
+
+7)Examine whether employees who worked very long hours were promoted in the last five years.
+```
+# Create plot to examine relationship between `average_monthly_hours` and `promotion_last_5years`
+plt.figure(figsize=(16, 3))
+sns.scatterplot(data=df1, x='average_monthly_hours', y='promotion_last_5years', hue='left', alpha=0.4)
+plt.axvline(x=166.67, color='#ff6361', ls='--')
+plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
+plt.title('Monthly hours by promotion last 5 years', fontsize='14');
+```
+![Promotion](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/MonthlyHoursByPromotion_LastFiveYears.png "Promotion")
+
+8)Inspect how the employees who left are distributed across departments.
+```
+# Create stacked histogram to compare department distribution of employees who left to that of employees who didn't
+plt.figure(figsize=(11,8))
+sns.histplot(data=df1, x='department', hue='left', discrete=1, 
+             hue_order=[0, 1], multiple='dodge', shrink=.5)
+plt.xticks(rotation='45')
+plt.title('Counts of stayed/left by department', fontsize=14);
+```
+![Left](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/CountOfLeft_ByDepartment.png "Left")
+
+9)Check for strong correlations between variables in the data.
+```
+# Plot a correlation heatmap
+plt.figure(figsize=(16, 9))
+heatmap = sns.heatmap(df0.corr(), vmin=-1, vmax=1, annot=True, cmap=sns.color_palette("vlag", as_cmap=True))
+heatmap.set_title('Correlation Heatmap', fontdict={'fontsize':14}, pad=12);
+```
+![Correlation](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/CorrelationHeatmap.png "Correlation")
+
+# Construct
+
+## Build a machine learning model 
+
+1)Before splitting the data, encode the non-numeric variables. There are two: department and salary.
+```
+# Copy the dataframe
+df_enc = df1.copy()
+
+# Encode the `salary` column as an ordinal numeric category
+df_enc['salary'] = (
+    df_enc['salary'].astype('category')
+    .cat.set_categories(['low', 'medium', 'high'])
+    .cat.codes
+)
+
+# Dummy encode the `department` column
+df_enc = pd.get_dummies(df_enc, drop_first=False)
+
+# Display the new dataframe
+df_enc.head()
+```
+2)Create a heatmap to visualize how correlated variables are. Consider which variables you're interested in examining correlations between.
+```
+plt.figure(figsize=(8, 6))
+sns.heatmap(df_enc[['satisfaction_level', 'last_evaluation', 'number_project', 'average_monthly_hours', 'tenure']]
+            .corr(), annot=True, cmap="crest")
+plt.title('Heatmap of the dataset')
+plt.show()
+```
+![Heatmap](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/HeatMapOfDataset.png "Heatmap")
+
+3)Create a stacked bar plot to visualize number of employees across department, comparing those who left with those who didn't.
+```
+# In the legend, 0 (purple color) represents employees who did not leave, 1 (red color) represents employees who left
+pd.crosstab(df1['department'], df1['left']).plot(kind ='bar',color='mr')
+plt.title('Counts of employees who left versus stayed across department')
+plt.ylabel('Employee count')
+plt.xlabel('Department')
+plt.show()
+```
+![Barplot](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/StayedVsLeft_ByDepartment.png "Barplot")
+
+4)Since logistic regression is quite sensitive to outliers, it would be a good idea at this stage to remove the outliers in the tenure column that were identified earlier.
+```
+# Select rows without outliers in `tenure` and save resulting dataframe in a new variable
+df_logreg = df_enc[(df_enc['tenure'] >= lower_limit) & (df_enc['tenure'] <= upper_limit)]
+
+# Display first few rows of new dataframe
+df_logreg.head()
+```
+5)Isolate the outcome variable, which is the variable you want your model to predict.
+```
+y = df_logreg['left']
+
+# Display first few rows of the outcome variable
+y.head()
+```
+6)Select the features you want to use in your model. Consider which variables will help you predict the outcome variable
+```
+X = df_logreg.drop('left', axis=1)
+
+# Display the first few rows of the selected features 
+X.head()
+```
+7)Split the data into training set and testing set. Don't forget to stratify based on the values in y, since the classes are unbalanced.
+```
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, stratify=y, random_state=42)
+```
+8)Construct a logistic regression model and fit it to the training dataset.
+```
+log_clf = LogisticRegression(random_state=42, max_iter=500).fit(X_train, y_train)
+```
+9)Test the logistic regression model: use the model to make predictions on the test set.
+```
+y_pred = log_clf.predict(X_test)
+```
+10)Create a confusion matrix to visualize the results of the logistic regression model.
+```
+# Compute values for confusion matrix
+log_cm = confusion_matrix(y_test, y_pred, labels=log_clf.classes_)
+
+# Create display of confusion matrix
+log_disp = ConfusionMatrixDisplay(confusion_matrix=log_cm, 
+                                  display_labels=log_clf.classes_)
+
+# Plot confusion matrix
+log_disp.plot(values_format='')
+
+# Display plot
+plt.show()
+```
+![ConfusionMatrix](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/ConfusionMatrix.png "ConfusionMatrix")
+
+11)Check the class balance in the data. In other words, check the value counts in the left column. Since this is a binary classification task, the class balance informs the way you interpret accuracy metrics.
+```
+df_logreg['left'].value_counts(normalize=True)
+```
+12)Create classification report for logistic regression model
+```
+target_names = ['Predicted would not leave', 'Predicted would leave']
+print(classification_report(y_test, y_pred, target_names=target_names))
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
