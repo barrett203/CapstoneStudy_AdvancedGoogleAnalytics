@@ -160,7 +160,8 @@ ax[1].set_title('Number of projects histogram', fontsize='14')
 plt.show()
 ```
 ![Projects](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/MonthlyHours_ByNumberOfProjects.png "Projects")
-
+* The mean hours of each group (stayed and left) increases with number of projects worked.
+* Everyone with seven projects left the company, and the interquartile ranges of this group and those who left with six projects was ~255–295 hours/month—much more than any other group. It seems that employees here are overworked.
 3)Examine the average monthly hours versus the satisfaction levels.
 ```
 # Create scatterplot of `average_monthly_hours` versus `satisfaction_level`, comparing employees who stayed versus those who left
@@ -171,7 +172,7 @@ plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
 plt.title('Monthly hours by last evaluation score', fontsize='14');
 ```
 ![Scatterplot](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/MonthlyHours_ByEvaluationScore.png "Scatterplot")
-
+* The scatterplot above shows that there was a sizeable group of employees who worked ~240–315 hours per month. 315 hours per month is over 75 hours per week for a whole year. It's likely this is related to their satisfaction levels being close to zero.
 4)Visualize satisfaction levels by time spent at the company.
 ```
 # Set figure and axes
@@ -191,7 +192,8 @@ ax[1].set_title('Tenure histogram', fontsize='14')
 plt.show();
 ```
 ![Tenure](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/Satisfaction_ByTenure.png "Tenure")
-
+* Employees who left fall into two general categories: dissatisfied employees with shorter tenures and very satisfied employees with medium-length tenures.
+* Four-year employees who left seem to have an unusually low satisfaction level. It's worth investigating changes to company policy that might have affected people specifically at the four-year mark, if possible.
 5)Examine salary levels for different times spent at the company. 
 ```
 # Set figure and axes
@@ -214,7 +216,7 @@ sns.histplot(data=tenure_long, x='tenure', hue='salary', discrete=1,
 ax[1].set_title('Salary histogram by tenure: long-tenured people', fontsize='14');
 ```
 ![Salary](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/SalaryHistogram_ByTenure.png "Salary")
-
+* The plots above show that long-tenured employees were not disproportionately comprised of higher-paid employees.
 6)Explore whether there's a correlation between working long hours and receiving high evaluation scores.
 ```
 # Create scatterplot of `average_monthly_hours` versus `last_evaluation`
@@ -225,7 +227,10 @@ plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
 plt.title('Monthly hours by last evaluation score', fontsize='14');
 ```
 ![Evaluation](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/MonthlyHoursBy_LastEvaluationScore.png "Evaluation")
-
+* The scatterplot indicates two groups of employees who left: overworked employees who performed very well and employees who worked slightly under the nominal monthly average of 166.67 hours with lower evaluation scores.
+* There seems to be a correlation between hours worked and evaluation score.
+* There isn't a high percentage of employees in the upper left quadrant of this plot; but working long hours doesn't guarantee a good evaluation score.
+* Most of the employees in this company work well over 167 hours per month.
 7)Examine whether employees who worked very long hours were promoted in the last five years.
 ```
 # Create plot to examine relationship between `average_monthly_hours` and `promotion_last_5years`
@@ -236,7 +241,9 @@ plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
 plt.title('Monthly hours by promotion last 5 years', fontsize='14');
 ```
 ![Promotion](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/MonthlyHoursByPromotion_LastFiveYears.png "Promotion")
-
+* Very few employees who were promoted in the last five years left
+* Very few employees who worked the most hours were promoted
+* All of the employees who left were working the longest hours
 8)Inspect how the employees who left are distributed across departments.
 ```
 # Create stacked histogram to compare department distribution of employees who left to that of employees who didn't
@@ -247,7 +254,7 @@ plt.xticks(rotation='45')
 plt.title('Counts of stayed/left by department', fontsize=14);
 ```
 ![Left](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/CountOfLeft_ByDepartment.png "Left")
-
+* There doesn't seem to be any department that differs significantly in its proportion of employees who left to those who stayed.
 9)Check for strong correlations between variables in the data.
 ```
 # Plot a correlation heatmap
@@ -256,7 +263,7 @@ heatmap = sns.heatmap(df0.corr(), vmin=-1, vmax=1, annot=True, cmap=sns.color_pa
 heatmap.set_title('Correlation Heatmap', fontdict={'fontsize':14}, pad=12);
 ```
 ![Correlation](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/CorrelationHeatmap.png "Correlation")
-
+* The correlation heatmap confirms that the number of projects, monthly hours, and evaluation scores all have some positive correlation with each other, and whether an employee leaves is negatively correlated with their satisfaction level.
 # Construct
 
 ## Build a logistic regression machine learning model 
@@ -350,16 +357,26 @@ log_disp.plot(values_format='')
 plt.show()
 ```
 ![ConfusionMatrix](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/ConfusionMatrix.png "ConfusionMatrix")
+* The upper-left quadrant displays the number of true negatives. The upper-right quadrant displays the number of false positives. The bottom-left quadrant displays the number of false negatives. The bottom-right quadrant displays the number of true positives.
+* True negatives: The number of people who did not leave that the model accurately predicted did not leave.
+* False positives: The number of people who did not leave the model inaccurately predicted as leaving.
+* False negatives: The number of people who left that the model inaccurately predicted did not leave
+* True positives: The number of people who left the model accurately predicted as leaving
+* A perfect model would yield all true negatives and true positives, and no false negatives or false positives.
 
 11)Check the class balance in the data. In other words, check the value counts in the left column. Since this is a binary classification task, the class balance informs the way you interpret accuracy metrics.
 ```
 df_logreg['left'].value_counts(normalize=True)
 ```
+* There is an approximately 83%-17% split. So the data is not perfectly balanced, but it is not too imbalanced. If it was more severely imbalanced, you might want to resample the data to make it more balanced. In this case, you can use this data without modifying the class balance and continue evaluating the model.
+
 12)Create classification report for logistic regression model
 ```
 target_names = ['Predicted would not leave', 'Predicted would leave']
 print(classification_report(y_test, y_pred, target_names=target_names))
 ```
+* The classification report above shows that the logistic regression model achieved a precision of 79%, recall of 82%, f1-score of 80% (all weighted averages), and accuracy of 82%. However, if it's most important to predict employees who leave, then the scores are significantly lower.
+
 ## Act
 The model and the feature importances extracted from the model confirms that employees at the company are overworked.
 
