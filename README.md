@@ -29,7 +29,7 @@ Hr Analytics Job Prediction Data on [Kaggle](https://www.kaggle.com/datasets/mfa
 # Process
 
 ## Applications
-Excel will be used to load the data and initially look for any issues. Python will then be used to transform and explore the data. 
+Excel will be used to load the data and initially look for any issues. Python will then be used to transform and explore the data, as well as to construct a predictive machine learning model.  
 
 ## Transform and Explore 
 All Python code can be found [here](https://github.com/barrett203/CapstoneStudy_AdvancedGoogleAnalytics/blob/main/PythonScript).
