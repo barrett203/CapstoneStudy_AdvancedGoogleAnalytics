@@ -26,7 +26,7 @@ Hr Analytics Job Prediction Data on [Kaggle](https://www.kaggle.com/datasets/mfa
 ### Limitations: 
 * Since the data was collected through a survey, the results may not be accurate as such participants may not provide honest and accurate answers.
 
-# Process
+## Process
 
 ## Applications
 Excel will be used to load the data and initially look for any issues. Python will then be used to transform and explore the data, as well as to construct a predictive machine learning model.  
@@ -130,7 +130,7 @@ print("Number of rows in the data containing outliers in `tenure`:", len(outlier
 ```
 * 824 rows in the time spent at company column contain outliers. As certain types of models are more sensitive to outliers than others, these will be considered at the model building stage of analysis.
 
-# Analyze 
+## Analyze 
 
 ## Select summary statistics and visualizations 
 1)Showcase descriptive statistics 
